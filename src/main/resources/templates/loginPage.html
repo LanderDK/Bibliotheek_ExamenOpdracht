@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Bibliotheek - Login</title>
+<link rel="stylesheet" th:href="@{/css/login.css}" />
+</head>
+<body>
+	<h1 style="text-align:center">Bibliotheek LDK</h1>
+	<form th:action="@{/login}" th:object="${account}" method="post">
+		<label>Username:</label> <input type="text" th:field="*{username}"
+			size="15" placeholder="JohnDoe" /> <br> <br> <label>Password:</label>
+		<input type="password" th:field="*{password}" size="15"
+			placeholder="password" /> <br> <br>
+		<button>Login</button>
+	</form>
+</body>
+</html>
