@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Bibliotheek - Boek</title>
+<link rel="stylesheet" th:href="@{/css/detail.css}" />
+</head>
+<body>
+	<!-- Navbar -->
+	<nav class="navbar">
+		<h1 class="navbar-title">
+			<a href="/bibliotheek/list">Bibliotheek LDK</a>
+		</h1>
+		<ul class="navbar-items">
+			<li class="navbar-item"><a href="/bibliotheek/list">Alle
+					boeken</a></li>
+			<li class="navbar-item"><a href="/bibliotheek/populair">Populairste boeken</a></li>
+			<li th:if="${account.role == 'Admin'}" class="navbar-item"><a
+				href="/bibliotheek/add">Boek toevoegen</a></li>
+			<li class="navbar-item"><a href="/login">Uitloggen</a></li>
+		</ul>
+	</nav>
+	<div class="book-details">
+		<img alt="BoekImg" th:src="${boek.getImg}">
+		<div>
+			<h2 th:text="${boek.getBoekNaam}"></h2>
+			<p>
+			Auteurs:
+				<p th:each="auteur : ${boek.getAuteurs}"
+				th:if="${auteur != null and not #strings.isEmpty(auteur)}"
+				th:text="${auteur}">
+				</p>
+			</p>
+			<p th:text="|ISBN-nummer: ${boek.getIsbn}|"></p>
+			<p>Beschikbaar in:
+				<p th:each="locatie: ${boek.getLocaties}"
+				th:text="${locatie.getPlaatsnaam}"></p>
+			</p>
+			<p th:text="|Reviews: ${boek.getAantalSterren}/5|"></p>
+			<p th:text="|Prijs: ${boek.getAankoopprijs}|"></p>
+			<a
+				th:if="${!account.getFavorieten.contains(boek.getBoekID) && account.getFavorieten.size() < account.getMaxAantalFavs}"
+				th:href="|/favorieten/add/${boek.getBoekID}|">
+				<button>Voeg toe aan favorieten</button>
+			</a> <a th:if="${account.getFavorieten.contains(boek.getBoekID)}"
+				th:href="|/favorieten/remove/${boek.getBoekID}|">
+				<button>Verwijder uit favorieten</button>
+			</a>
+		</div>
+	</div>
+</body>
+</html>

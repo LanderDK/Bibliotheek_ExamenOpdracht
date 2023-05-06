@@ -1,14 +1,19 @@
-package com.springBoot.bank;
+package com.springBoot.Bibliotheek;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import domain.BibBoekLookup;
+import service.BibliotheekService;
+import service.BibliotheekServiceImpl;
 
 @SpringBootApplication
+@EnableJpaRepositories("repository")
+@EntityScan("domain")
 public class BibliotheekExamenOpdrachtApplication implements WebMvcConfigurer {
 
 	public static void main(String[] args) {
@@ -20,7 +25,7 @@ public class BibliotheekExamenOpdrachtApplication implements WebMvcConfigurer {
 	}
 	
 	@Bean
-	BibBoekLookup bbl() {
-		return new BibBoekLookup();
+	BibliotheekService bs() {
+		return new BibliotheekServiceImpl();
 	}
 }

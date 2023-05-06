@@ -1,5 +1,8 @@
-package com.springBoot.bank;
+package com.springBoot.Bibliotheek;
 
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,33 +14,39 @@ import domain.Account;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import repository.AccountRepository;
 
 @Slf4j
 @Controller
 @RequestMapping("/login")
 public class LoginController {
 
+	@Autowired
+	AccountRepository ar;
+
 	@GetMapping
-	public String showLoginPage(Model model, HttpSession session) {
+	public String showLoginPage(HttpSession session) {
 		log.info("Get login");
 		session.setAttribute("account", null);
-		model.addAttribute("account", new Account());
 		return "loginPage";
 	}
 
 	@PostMapping
 	public String onSubmit(@Valid Account account, BindingResult result, Model model, HttpSession session) {
 		log.info("Post login");
+		Account acc;
+		
 		// validate
 		if (result.hasErrors())
-			return "loginFailedPage";
+			return "loginPage";
 
-		account = new Account("123", account.getUsername(), account.getPassword(), "Admin");
-		Account acc = new Account("123", account.getUsername(), account.getPassword(), "User");
-		if (!account.getUsername().equals("Lander") || !account.getPassword().equals("P@ss"))
-			return "loginFailedPage";
-		
-		session.setAttribute("account", account);
-		return "redirect:/bibliotheek";
+		Optional<Account> accOptional = ar.findByUsernameAndPassword(account.getUsername(), account.getPassword());
+		if (!accOptional.isPresent())
+			return "loginPage";
+		else
+			acc = accOptional.get();
+
+		session.setAttribute("account", acc);
+		return "redirect:/bibliotheek/list";
 	}
 }

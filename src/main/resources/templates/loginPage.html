@@ -6,12 +6,14 @@
 <link rel="stylesheet" th:href="@{/css/login.css}" />
 </head>
 <body>
-	<h1 style="text-align:center">Bibliotheek LDK</h1>
+	<h1 style="text-align: center">Bibliotheek LDK</h1>
 	<form th:action="@{/login}" th:object="${account}" method="post">
-		<label>Username:</label> <input type="text" th:field="*{username}"
-			size="15" placeholder="JohnDoe" /> <br> <br> <label>Password:</label>
-		<input type="password" th:field="*{password}" size="15"
-			placeholder="password" /> <br> <br>
+		<label for="username" >Username:</label> 
+		<input type="text" id="username" name="username" size="15" placeholder="JohnDoe" required="required" /> 
+		<br> <br> 
+		<label for="password">Password:</label>
+		<input type="password" id="password" name="password" size="15" placeholder="**********" required="required" /> 
+		<br> <br>
 		<button>Login</button>
 	</form>
 </body>

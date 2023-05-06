@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Bibliotheek - Add Boek</title>
+<link rel="stylesheet" th:href="@{/css/add.css}" />
+</head>
+<body>
+	<!-- Navbar -->
+	<nav class="navbar">
+		<h1 class="navbar-title">
+			<a href="/bibliotheek/list">Bibliotheek LDK</a>
+		</h1>
+		<ul class="navbar-items">
+			<li class="navbar-item"><a href="/bibliotheek/list">Alle
+					boeken</a></li>
+			<li class="navbar-item"><a href="/bibliotheek/populair">Populairste boeken</a></li>
+			<li th:if="${account.role == 'Admin'}" class="navbar-item"><a
+				href="/bibliotheek/add">Boek toevoegen</a></li>
+			<li class="navbar-item"><a href="/login">Uitloggen</a></li>
+		</ul>
+	</nav>
+	<form th:action="@{/bibliotheek/add}" th:object="${boek}" method="post">
+		<p>
+			<label for="boekNaam">Boek Naam</label> <input type="text"
+				id="boekNaam" name="boekNaam" size="20" />
+		</p>
+		<p>
+			<label for="auteurs">Auteurs</label> <input type="text" id="auteurs"
+				name="auteurs[0]" size="20" /> <input type="text" id="auteurs"
+				name="auteurs[1]" size="20" /> <input type="text" id="auteurs"
+				name="auteurs[2]" size="20" />
+		</p>
+		<p>
+			<label for="isbn">ISBN-Nummer</label> <input type="text" id="isbn"
+				name="isbn" size="20" />
+		</p>
+		<p>
+			<label for="aankoopprijs">Aankoopprijs</label> <input type="text"
+				id="aankoopprijs" name="aankoopprijs" size="20" />
+		</p>
+		<p>
+			<label for="aantalSterren">Aantal Sterren</label> <input type="text"
+				id="aantalSterren" name="aantalSterren" size="20" />
+		</p>
+		<p>
+			<label for="locatie1">Locatie 1</label> <input type="text"
+				id="locatie1" name="locaties[0].plaatsnaam" size="20" placeholder="Plaatsnaam" /> <input
+				type="text" id="locatie1_code1" name="locaties[0].plaatscode1"
+				size="20" placeholder="Plaatscode1" /> <input type="text" id="locatie1_code2"
+				name="locaties[0].plaatscode2" size="20" placeholder="Plaatscode2" /> <label for="locatie2">Locatie
+				2</label> <input type="text" id="locatie2" name="locaties[1].plaatsnaam"
+				size="20" placeholder="Plaatsnaam" /> <input type="text" id="locatie2_code1"
+				name="locaties[1].plaatscode1" size="20" placeholder="Plaatscode1" /> <input type="text"
+				id="locatie2_code2" name="locaties[1].plaatscode2" size="20" placeholder="Plaatscode2" /> <label
+				for="locatie3">Locatie 3</label> <input type="text" id="locatie3"
+				name="locaties[2].plaatsnaam" size="20" placeholder="Plaatsnaam" /> <input type="text"
+				id="locatie3_code1" name="locaties[2].plaatscode1" size="20" placeholder="Plaatscode1" /> <input
+				type="text" id="locatie3_code2" name="locaties[2].plaatscode2"
+				size="20" placeholder="Plaatscode2" />
+		</p>
+		<p>
+			<label for="img">Afbeelding Cover</label> <input type="text" id="img"
+				name="img" size="20" />
+		</p>
+		<!-- <p>
+			<label for="locaties">Locaties</label> <input type="text"
+				id="locaties" name="locaties" size="20" />
+		</p>-->
+		<button type="submit">Save</button>
+	</form>
+</body>
+</html>

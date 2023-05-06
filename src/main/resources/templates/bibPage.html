@@ -9,23 +9,54 @@
 	<!-- Navbar -->
 	<nav class="navbar">
 		<h1 class="navbar-title">
-			<a href="">Bibliotheek LDK</a>
+			<a href="/bibliotheek/list">Bibliotheek LDK</a>
 		</h1>
 		<ul class="navbar-items">
-			<li class="navbar-item"><a href="">Alle boeken</a></li>
-			<li class="navbar-item"><a href="#">Populairste boeken</a></li>
+			<li class="navbar-item"><a href="/bibliotheek/list">Alle
+					boeken</a></li>
+			<li class="navbar-item"><a href="/bibliotheek/populair">Populairste boeken</a></li>
 			<li th:if="${account.role == 'Admin'}" class="navbar-item"><a
-				href="#">Boek toevoegen</a></li>
-			<li class="navbar-item"><a href="login">Uitloggen</a></li>
+				href="/bibliotheek/add">Boek toevoegen</a></li>
+			<li class="navbar-item"><a href="/login">Uitloggen</a></li>
 		</ul>
 	</nav>
 
 	<h1 th:text="|Welkom terug, ${account.username}!|"></h1>
 	<div class="book-container">
-		<a href="login" th:each="boek : ${boeken}" class="book-card">
-			<div class="book-card-title" th:text="${boek.getNaam}"></div>
-			<div class="book-card-author" th:text="${boek.getAuteurs}"></div>
-		</a>
+		<div th:each="boek : ${boeken}" class="book-card">
+			<a th:href="|${boek.getBoekID}|"> <img class="book-card-img"
+				alt="BoekImg" th:src="${boek.getImg}">
+				<div class="book-card-title" th:text="${boek.getBoekNaam}"></div>
+				<div class="book-card-author" th:each="auteur : ${boek.getAuteurs}">
+					<div th:if="${auteur != null and not #strings.isEmpty(auteur)}"
+						th:text="${auteur}"></div>
+				</div>
+				<div class="stars-container">
+					<div class="stars-number" th:text="${boek.getAantalSterren}"></div>
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+						fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+  					<path
+							d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+				</svg>
+				</div>
+			</a> <a
+				th:if="${!account.getFavorieten.contains(boek.getBoekID) && account.getFavorieten.size() < account.getMaxAantalFavs}"
+				th:href="|/favorieten/add/${boek.getBoekID}|"> <svg
+					xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+					fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+    			<path fill-rule="evenodd"
+						d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
+  			</svg>
+			</a> <a th:if="${account.getFavorieten.contains(boek.getBoekID)}"
+				th:href="|/favorieten/remove/${boek.getBoekID}|"> <svg
+					xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+					fill="currentColor" class="bi bi-heart-fill-red"
+					viewBox="0 0 16 16">
+    			<path fill-rule="evenodd"
+						d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
+  			</svg>
+			</a>
+		</div>
 	</div>
 </body>
 </html>

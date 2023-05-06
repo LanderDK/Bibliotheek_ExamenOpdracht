@@ -1,0 +1,94 @@
+:root {
+	--kleur-1: #F1F6F9; 
+	--kleur-2: #394867; 
+	--kleur-3: #212A3E; 
+	--kleur-4: #9BA4B5;
+}
+
+body {
+	background-color: var(--kleur-1);
+	font-family: Arial, sans-serif;
+	margin: 0;
+}
+
+h1 {
+	color: var(--kleur-2);
+	font-size: 2em;
+	margin: 1em;
+}
+
+/* Navbar stijlen */
+.navbar {
+	background-color: var(--kleur-2);
+	color: white;
+	display: flex;
+	justify-content: space-between;
+	padding: 1em;
+}
+
+.navbar-title {
+	font-size: 1.5em;
+	font-weight: bold;
+	margin: 0;
+	color: var(--kleur-1);
+}
+
+.navbar-title a {
+	text-decoration: none;
+	color: var(--kleur-1);
+}
+
+.navbar-items {
+	display: flex;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.navbar-item {
+	margin: 0 1em;
+}
+
+.navbar-item a {
+	color: white;
+	text-decoration: none;
+}
+
+.navbar-item a:hover {
+	text-decoration: underline;
+}
+
+.book-details {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		background-color: var(--kleur-1);
+		padding: 5%;
+		box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+		border-radius: 8px;
+	}
+
+	.book-details img {
+		height: 400px;
+		margin-right: 5%;
+		border-radius: 8px;
+		box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+	}
+
+	.book-details h2 {
+		font-size: 24px;
+		font-weight: bold;
+		color: var(--kleur-2);
+		margin-bottom: 10%;
+	}
+
+	.book-details p {
+		font-size: 16px;
+		color: var(--kleur-3);
+		margin-bottom: 5%;
+	}
+
+	.book-details span {
+		font-size: 14px;
+		color: var(--kleur-4);
+	}
