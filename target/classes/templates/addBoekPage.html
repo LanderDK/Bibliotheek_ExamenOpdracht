@@ -49,18 +49,14 @@
 				th:field="*{locaties[0].plaatscode1}" size="20"
 				placeholder="Plaatscode1" /> <input type="text" id="locatie1_code2"
 				th:field="*{locaties[0].plaatscode2}" size="20"
-				placeholder="Plaatscode2" /><span
-				th:if="${#fields.hasErrors('locaties')}" th:errorclass="error"
-				th:errors="*{locaties}"></span> <label for="locatie2">
-				Locatie 2</label> <input type="text" id="locatie2"
+				placeholder="Plaatscode2" /> <label for="locatie2"> Locatie
+				2</label> <input type="text" id="locatie2"
 				th:field="*{locaties[1].plaatsnaam}" size="20"
 				placeholder="Plaatsnaam" /> <input type="text" id="locatie2_code1"
 				th:field="*{locaties[1].plaatscode1}" size="20"
 				placeholder="Plaatscode1" /> <input type="text" id="locatie2_code2"
 				th:field="*{locaties[1].plaatscode2}" size="20"
-				placeholder="Plaatscode2" /><span
-				th:if="${#fields.hasErrors('locaties')}" th:errorclass="error"
-				th:errors="*{locaties}"></span> <label for="locatie3">Locatie
+				placeholder="Plaatscode2" /> <label for="locatie3">Locatie
 				3</label> <input type="text" id="locatie3"
 				th:field="*{locaties[2].plaatsnaam}" size="20"
 				placeholder="Plaatsnaam" /> <input type="text" id="locatie3_code1"
@@ -73,7 +69,9 @@
 		</p>
 		<p>
 			<label for="img">Afbeelding Cover</label> <input type="text" id="img"
-				name="img" size="20" />
+				th:field="*{img}" size="20" /><span
+				th:if="${#fields.hasErrors('img')}" th:errorclass="error"
+				th:errors="*{img}"></span>
 		</p>
 		<!-- <p>
 			<label for="locaties">Locaties</label> <input type="text"

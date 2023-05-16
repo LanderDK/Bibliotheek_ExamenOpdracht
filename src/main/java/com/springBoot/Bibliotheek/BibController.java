@@ -1,5 +1,6 @@
 package com.springBoot.Bibliotheek;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +24,7 @@ import domain.Users;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import repository.BoekLocatieRespository;
 import repository.BoekRepository;
 import repository.UserRepository;
 import validator.BoekValidation;
@@ -38,11 +40,13 @@ public class BibController {
 	private UserRepository ur;
 	@Autowired
 	private BoekValidation bv;
+	@Autowired
+	BoekLocatieRespository blr;
 
 	@GetMapping(value = "/list")
 	public String showBibPage(Model model, Authentication authentication) {
 		log.info("Get bib");
-		
+
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 		String username = userDetails.getUsername();
 		Optional<Users> user = ur.findByUsername(username);
@@ -53,7 +57,7 @@ public class BibController {
 		model.addAttribute("user", u);
 		model.addAttribute("userListRoles", listRoles);
 		model.addAttribute("boeken", br.findAll());
-		
+
 		return "bibPage";
 	}
 
@@ -84,7 +88,7 @@ public class BibController {
 	@GetMapping(value = "/add")
 	public String showAddBoekPage(Model model, Authentication authentication) {
 		log.info("Add boek");
-		
+
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 		String username = userDetails.getUsername();
 		Optional<Users> user = ur.findByUsername(username);
@@ -95,7 +99,7 @@ public class BibController {
 		model.addAttribute("user", u);
 		model.addAttribute("userListRoles", listRoles);
 		model.addAttribute(new Boek());
-		
+
 		return "addBoekPage";
 	}
 
@@ -112,22 +116,29 @@ public class BibController {
 		List<String> listRoles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
 		model.addAttribute("user", u);
 		model.addAttribute("userListRoles", listRoles);
-		
-		
+
 		// validate
 		bv.validate(boek, result);
-		System.out.println(result);
 		if (result.hasErrors())
 			return "addBoekPage";
 
 		br.save(boek);
+		ArrayList<BoekLocatie> locaties = new ArrayList<>();
+		for (BoekLocatie bl : boek.getLocaties()) {
+			if (bl.getPlaatsnaam() != "" || !bl.getPlaatsnaam().isBlank() || !bl.getPlaatsnaam().isEmpty()) {
+				locaties.add(bl);
+			}
+		}
+		for (BoekLocatie locatie : locaties)
+			blr.save(locatie);
+
 		return "redirect:/bibliotheek/list";
 	}
 
 	@GetMapping(value = "/populair")
 	public String showBibPopulairPage(Model model, Authentication authentication) {
 		log.info("Get bib populair");
-		
+
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 		String username = userDetails.getUsername();
 		Optional<Users> user = ur.findByUsername(username);
@@ -137,7 +148,7 @@ public class BibController {
 		List<String> listRoles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
 		model.addAttribute("user", u);
 		model.addAttribute("userListRoles", listRoles);
-		
+
 		model.addAttribute("boeken", br.findMeestPopulair());
 		return "bibPopulairPage";
 	}

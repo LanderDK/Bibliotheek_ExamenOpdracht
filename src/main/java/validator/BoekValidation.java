@@ -2,9 +2,11 @@ package validator;
 
 import domain.Boek;
 import domain.BoekLocatie;
+import repository.BoekLocatieRespository;
 
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -33,10 +35,18 @@ public class BoekValidation implements Validator {
 			}
 		}
 
+		ArrayList<BoekLocatie> locaties = new ArrayList<>();
 		for (BoekLocatie bl : boek.getLocaties()) {
 			if (bl.getPlaatsnaam() != "" || !bl.getPlaatsnaam().isBlank() || !bl.getPlaatsnaam().isEmpty()) {
-				if (bl.getPlaatscode1() - bl.getPlaatscode2() <= 50) {
-					errors.rejectValue("locaties", "verschilPlaatsCodesKleinDan50", null, "");
+				locaties.add(bl);
+			}
+			if (locaties.isEmpty()) {
+				errors.rejectValue("locaties", "locatiesIsNullOrEmpty", null, "");
+			} else {
+				for (BoekLocatie locatie : locaties) {
+					if (locatie.getPlaatscode1() - locatie.getPlaatscode2() <= 50) {
+						errors.rejectValue("locaties", "verschilPlaatsCodesKleinDan50", null, "");
+					}
 				}
 			}
 		}

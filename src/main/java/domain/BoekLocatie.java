@@ -29,15 +29,16 @@ public class BoekLocatie implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int locatieID;
 
-	@Min(50)
-	@Max(300)
+	@NotNull
+	@Min(value = 50, message = "{boekLocatie.plaatscode.minimumValue}")
+	@Max(value = 300, message = "{boekLocatie.plaatscode.maximumValue}")
 	private int plaatscode1;
 
-	@Min(50)
-	@Max(300)
+	@NotNull
+	@Min(value = 50, message = "{boekLocatie.plaatscode.minimumValue}")
+	@Max(value = 300, message = "{boekLocatie.plaatscode.maximumValue}")
 	private int plaatscode2;
 
-	@Pattern(regexp = "^[a-zA-Z]+$")
 	@NotNull
 	private String plaatsnaam;
 

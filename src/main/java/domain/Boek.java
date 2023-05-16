@@ -39,7 +39,6 @@ public class Boek implements Serializable {
 	private String boekNaam;
 
 	@NotNull
-	@NotEmpty
 	private List<String> auteurs;
 
 	@Pattern(regexp = "^(?=(?:\\D*\\d){10}(?:(?:\\D*\\d){3})?$)[\\d-]+$", message = "Invalid ISBN format")
@@ -57,6 +56,8 @@ public class Boek implements Serializable {
 	@Min(value = 0)
 	private Integer aantalSterren;
 
+	@NotNull
+	@Pattern(regexp = "^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$", message = "Invalid IMG URL")
 	private String img;
 
 	public Boek(String boekNaam, ArrayList<String> auteurs, String isbn, Double aankoopprijs,
