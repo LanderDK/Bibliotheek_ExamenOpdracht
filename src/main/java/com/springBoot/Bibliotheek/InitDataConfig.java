@@ -10,20 +10,21 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 
-import domain.Account;
 import domain.Boek;
 import domain.BoekLocatie;
-import repository.AccountRepository;
+import domain.Users;
 import repository.BoekLocatieRespository;
 import repository.BoekRepository;
+import repository.UserRepository;
 
 @Component
 public class InitDataConfig implements CommandLineRunner {
 
 	@Autowired
-	private AccountRepository accountRepository;
+	private UserRepository userRepository;
 	@Autowired
 	private BoekRepository boekRepository;
 	@Autowired
@@ -45,8 +46,8 @@ public class InitDataConfig implements CommandLineRunner {
 				"978-1-60309-025-4", 19.99, new ArrayList<>(Arrays.asList(bl2)), 1,
 				"https://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9781501192272/the-talisman-9781501192272_hr.jpg");
 
-		Account lander = new Account("Lander", "TestPass1", "Admin", new ArrayList<>(), 2);
-		Account baba = new Account("Baba", "TestPass2", "User", new ArrayList<>(), 3);
+		Users lander = new Users("Lander", BCrypt.hashpw("TestPass1", BCrypt.gensalt(10)), new ArrayList<>(), 2, true);
+		Users baba = new Users("Baba", BCrypt.hashpw("TestPass2", BCrypt.gensalt(10)), new ArrayList<>(), 3, true);
 
 		boekLocatieRepository.save(bl1);
 		boekLocatieRepository.save(bl2);
@@ -55,7 +56,7 @@ public class InitDataConfig implements CommandLineRunner {
 		boekRepository.save(boek2);
 		boekRepository.save(boek3);
 
-		accountRepository.save(lander);
-		accountRepository.save(baba);
+		userRepository.save(lander);
+		userRepository.save(baba);
 	}
 }

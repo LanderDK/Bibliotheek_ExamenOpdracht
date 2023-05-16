@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+	<nav th:fragment="navbar" class="navbar">
+		<h1 class="navbar-title">
+			<a href="/bibliotheek/list">Bibliotheek LDK</a>
+		</h1>
+		<ul class="navbar-items">
+			<li class="navbar-item"><a href="/bibliotheek/list">Alle
+					boeken</a></li>
+			<li class="navbar-item"><a href="/bibliotheek/populair">Populairste
+					boeken</a></li>
+			<li th:if="${userListRoles.contains('ROLE_ADMIN')}" class="navbar-item"><a
+				href="/bibliotheek/add">Boek toevoegen</a></li>
+			<li class="navbar-item">
+				<div th:insert="~{utils :: logout}"></div>
+			</li>
+		</ul>
+	</nav>
+
+	<form th:fragment="logout" th:action="@{/logout}" method="post">
+		<input type="submit" value="Logout" /> <input type="hidden"
+			th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+	</form>
+
+	<div th:fragment="footer">&copy; 2023 Lander De Kesel</div>
+
+</body>
+
+</html>

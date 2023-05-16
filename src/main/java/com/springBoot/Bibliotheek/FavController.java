@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,12 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.service.annotation.GetExchange;
 
-import domain.Account;
 import domain.Boek;
+import domain.Users;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
-import repository.AccountRepository;
 import repository.BoekRepository;
+import repository.UserRepository;
 
 @Slf4j
 @Controller
@@ -29,25 +32,30 @@ public class FavController {
 	@Autowired
 	private BoekRepository br;
 	@Autowired
-	private AccountRepository ar;
+	private UserRepository ur;
 	
 	@GetMapping(value = "/add/{id}")
-    public String addFav(@PathVariable("id") Integer boekID, Model model, HttpSession session) {
+    public String addFav(@PathVariable("id") Integer boekID, Model model, Authentication authentication) {
 		log.info("Add fav");
 		
-		Account account = (Account) session.getAttribute("account");
-		
-		if (account == null)
-			return "redirect:/login";
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		String username = userDetails.getUsername();
+		Optional<Users> user = ur.findByUsername(username);
+		Users u = null;
+		if (user.isPresent())
+			u = user.get();
+		List<String> listRoles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+		model.addAttribute("user", u);
+		model.addAttribute("userListRoles", listRoles);
 		
 		//check als je max aantal favorieten hebt bereikt --> NIET COMPLEET -> mooie melding tonen
-		if (account.getFavorieten().size() == account.getMaxAantalFavs())
+		if (u.getFavorieten().size() == u.getMaxAantalFavs())
 			return "redirect:/bibliotheek/list";
 		
-		List<Integer> favs = account.getFavorieten();
+		List<Integer> favs = u.getFavorieten();
 		favs.add(boekID);
-		account.setFavorieten(favs);
-		ar.save(account);
+		u.setFavorieten(favs);
+		ur.save(u);
 		
 		Boek b;
 		Optional<Boek> boek = br.findByBoekID(boekID);
@@ -59,24 +67,28 @@ public class FavController {
         	b.setAantalSterren(b.getAantalSterren() + 1);
         	br.save(b);
         }
-		
-		model.addAttribute("account", account);
+
 		return "redirect:/bibliotheek/list";
     }
 	
 	@GetMapping(value = "/remove/{id}")
-    public String removeFav(@PathVariable("id") Integer boekID, Model model, HttpSession session) {
+    public String removeFav(@PathVariable("id") Integer boekID, Model model, Authentication authentication) {
 		log.info("Remove fav");
 		
-		Account account = (Account) session.getAttribute("account");
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		String username = userDetails.getUsername();
+		Optional<Users> user = ur.findByUsername(username);
+		Users u = null;
+		if (user.isPresent())
+			u = user.get();
+		List<String> listRoles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+		model.addAttribute("user", u);
+		model.addAttribute("userListRoles", listRoles);
 		
-		if (account == null)
-			return "redirect:/login";
-		
-		List<Integer> favs = account.getFavorieten();
+		List<Integer> favs = u.getFavorieten();
 		favs.remove(boekID);
-		account.setFavorieten(favs);
-		ar.save(account);
+		u.setFavorieten(favs);
+		ur.save(u);
 		
 		Boek b;
 		Optional<Boek> boek = br.findByBoekID(boekID);
@@ -88,8 +100,7 @@ public class FavController {
         	b.setAantalSterren(b.getAantalSterren() - 1);
         	br.save(b);
         }
-		
-		model.addAttribute("account", account);
+        
 		return "redirect:/bibliotheek/list";
     }
 }

@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 
-import domain.Account;
 import domain.Boek;
 import domain.BoekLocatie;
 

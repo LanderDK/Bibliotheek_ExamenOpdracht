@@ -7,57 +7,69 @@
 </head>
 <body>
 	<!-- Navbar -->
-	<nav class="navbar">
-		<h1 class="navbar-title">
-			<a href="/bibliotheek/list">Bibliotheek LDK</a>
-		</h1>
-		<ul class="navbar-items">
-			<li class="navbar-item"><a href="/bibliotheek/list">Alle
-					boeken</a></li>
-			<li class="navbar-item"><a href="/bibliotheek/populair">Populairste boeken</a></li>
-			<li th:if="${account.role == 'Admin'}" class="navbar-item"><a
-				href="/bibliotheek/add">Boek toevoegen</a></li>
-			<li class="navbar-item"><a href="/login">Uitloggen</a></li>
-		</ul>
-	</nav>
+	<div th:insert="~{utils :: navbar}"></div>
+
 	<form th:action="@{/bibliotheek/add}" th:object="${boek}" method="post">
 		<p>
 			<label for="boekNaam">Boek Naam</label> <input type="text"
-				id="boekNaam" name="boekNaam" size="20" />
+				id="boekNaam" th:field="*{boekNaam}" size="20" /> <span
+				th:if="${#fields.hasErrors('boekNaam')}" th:errorclass="error"
+				th:errors="*{boekNaam}"></span>
 		</p>
 		<p>
 			<label for="auteurs">Auteurs</label> <input type="text" id="auteurs"
-				name="auteurs[0]" size="20" /> <input type="text" id="auteurs"
-				name="auteurs[1]" size="20" /> <input type="text" id="auteurs"
-				name="auteurs[2]" size="20" />
+				th:field="*{auteurs[0]}" size="20" /> <input type="text"
+				id="auteurs" th:field="*{auteurs[1]}" size="20" /> <input
+				type="text" id="auteurs" th:field="*{auteurs[2]}" size="20" /> <span
+				th:if="${#fields.hasErrors('auteurs')}" th:errorclass="error"
+				th:errors="*{auteurs}"></span>
 		</p>
 		<p>
 			<label for="isbn">ISBN-Nummer</label> <input type="text" id="isbn"
-				name="isbn" size="20" />
+				th:field="*{isbn}" size="20" /><span
+				th:if="${#fields.hasErrors('isbn')}" th:errorclass="error"
+				th:errors="*{isbn}"></span>
 		</p>
 		<p>
 			<label for="aankoopprijs">Aankoopprijs</label> <input type="text"
-				id="aankoopprijs" name="aankoopprijs" size="20" />
+				id="aankoopprijs" th:field="*{aankoopprijs}" size="20" /><span
+				th:if="${#fields.hasErrors('aankoopprijs')}" th:errorclass="error"
+				th:errors="*{aankoopprijs}"></span>
 		</p>
 		<p>
 			<label for="aantalSterren">Aantal Sterren</label> <input type="text"
-				id="aantalSterren" name="aantalSterren" size="20" />
+				id="aantalSterren" th:field="*{aantalSterren}" size="20" /><span
+				th:if="${#fields.hasErrors('aantalSterren')}" th:errorclass="error"
+				th:errors="*{aantalSterren}"></span>
 		</p>
 		<p>
 			<label for="locatie1">Locatie 1</label> <input type="text"
-				id="locatie1" name="locaties[0].plaatsnaam" size="20" placeholder="Plaatsnaam" /> <input
-				type="text" id="locatie1_code1" name="locaties[0].plaatscode1"
-				size="20" placeholder="Plaatscode1" /> <input type="text" id="locatie1_code2"
-				name="locaties[0].plaatscode2" size="20" placeholder="Plaatscode2" /> <label for="locatie2">Locatie
-				2</label> <input type="text" id="locatie2" name="locaties[1].plaatsnaam"
-				size="20" placeholder="Plaatsnaam" /> <input type="text" id="locatie2_code1"
-				name="locaties[1].plaatscode1" size="20" placeholder="Plaatscode1" /> <input type="text"
-				id="locatie2_code2" name="locaties[1].plaatscode2" size="20" placeholder="Plaatscode2" /> <label
-				for="locatie3">Locatie 3</label> <input type="text" id="locatie3"
-				name="locaties[2].plaatsnaam" size="20" placeholder="Plaatsnaam" /> <input type="text"
-				id="locatie3_code1" name="locaties[2].plaatscode1" size="20" placeholder="Plaatscode1" /> <input
-				type="text" id="locatie3_code2" name="locaties[2].plaatscode2"
-				size="20" placeholder="Plaatscode2" />
+				id="locatie1" th:field="*{locaties[0].plaatsnaam}" size="20"
+				placeholder="Plaatsnaam" /> <input type="text" id="locatie1_code1"
+				th:field="*{locaties[0].plaatscode1}" size="20"
+				placeholder="Plaatscode1" /> <input type="text" id="locatie1_code2"
+				th:field="*{locaties[0].plaatscode2}" size="20"
+				placeholder="Plaatscode2" /><span
+				th:if="${#fields.hasErrors('locaties')}" th:errorclass="error"
+				th:errors="*{locaties}"></span> <label for="locatie2">
+				Locatie 2</label> <input type="text" id="locatie2"
+				th:field="*{locaties[1].plaatsnaam}" size="20"
+				placeholder="Plaatsnaam" /> <input type="text" id="locatie2_code1"
+				th:field="*{locaties[1].plaatscode1}" size="20"
+				placeholder="Plaatscode1" /> <input type="text" id="locatie2_code2"
+				th:field="*{locaties[1].plaatscode2}" size="20"
+				placeholder="Plaatscode2" /><span
+				th:if="${#fields.hasErrors('locaties')}" th:errorclass="error"
+				th:errors="*{locaties}"></span> <label for="locatie3">Locatie
+				3</label> <input type="text" id="locatie3"
+				th:field="*{locaties[2].plaatsnaam}" size="20"
+				placeholder="Plaatsnaam" /> <input type="text" id="locatie3_code1"
+				th:field="*{locaties[2].plaatscode1}" size="20"
+				placeholder="Plaatscode1" /> <input type="text" id="locatie3_code2"
+				th:field="*{locaties[2].plaatscode2}" size="20"
+				placeholder="Plaatscode2" /><span
+				th:if="${#fields.hasErrors('locaties')}" th:errorclass="error"
+				th:errors="*{locaties}"></span>
 		</p>
 		<p>
 			<label for="img">Afbeelding Cover</label> <input type="text" id="img"
@@ -69,5 +81,6 @@
 		</p>-->
 		<button type="submit">Save</button>
 	</form>
+	<div th:insert="~{utils :: footer}"></div>
 </body>
 </html>

@@ -1,8 +1,12 @@
 package com.springBoot.Bibliotheek;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,12 +17,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import domain.Account;
 import domain.Boek;
+import domain.BoekLocatie;
+import domain.Users;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import repository.BoekRepository;
+import repository.UserRepository;
+import validator.BoekValidation;
 
 @Slf4j
 @Controller
@@ -27,71 +34,110 @@ public class BibController {
 
 	@Autowired
 	private BoekRepository br;
+	@Autowired
+	private UserRepository ur;
+	@Autowired
+	private BoekValidation bv;
 
 	@GetMapping(value = "/list")
-	public String showBibPage(Model model, HttpSession session) {
+	public String showBibPage(Model model, Authentication authentication) {
 		log.info("Get bib");
-		Account account = (Account) session.getAttribute("account");
-		if (account == null)
-			return "redirect:/login";
-		model.addAttribute("account", account);
+		
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		String username = userDetails.getUsername();
+		Optional<Users> user = ur.findByUsername(username);
+		Users u = null;
+		if (user.isPresent())
+			u = user.get();
+		List<String> listRoles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+		model.addAttribute("user", u);
+		model.addAttribute("userListRoles", listRoles);
 		model.addAttribute("boeken", br.findAll());
+		
 		return "bibPage";
 	}
-	
+
 	@GetMapping(value = "/{id}")
-    public String show(@PathVariable("id") Integer boekID, Model model, HttpSession session) {
+	public String show(@PathVariable("id") Integer boekID, Model model, Authentication authentication) {
 		log.info("Get boek");
-		
-		Account account = (Account) session.getAttribute("account");
-		if (account == null)
-			return "redirect:/login";
-		model.addAttribute("account", account);
-		
+
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		String username = userDetails.getUsername();
+		Optional<Users> user = ur.findByUsername(username);
+		Users u = null;
+		if (user.isPresent())
+			u = user.get();
+		List<String> listRoles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+		model.addAttribute("user", u);
+		model.addAttribute("userListRoles", listRoles);
+
 		Boek b;
 		Optional<Boek> boek = br.findByBoekID(boekID);
-        if (!boek.isPresent()) {
+		if (!boek.isPresent()) {
 			return "redirect:/bibliotheek/list";
-		}
-        else
-        	b = boek.get();
-        model.addAttribute("boek", b);
-        return "detailBoekPage";
-    }
+		} else
+			b = boek.get();
+		model.addAttribute("boek", b);
+		return "detailBoekPage";
+	}
 
 	@GetMapping(value = "/add")
-	public String showAddBoekPage(Model model, HttpSession session) {
+	public String showAddBoekPage(Model model, Authentication authentication) {
 		log.info("Add boek");
-		Account account = (Account) session.getAttribute("account");
-		if (account == null)
-			return "redirect:/login";
-		if (!account.getRole().equals("Admin"))
-			return "redirect:/bibliotheek/list";
-		model.addAttribute("account", account);
+		
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		String username = userDetails.getUsername();
+		Optional<Users> user = ur.findByUsername(username);
+		Users u = null;
+		if (user.isPresent())
+			u = user.get();
+		List<String> listRoles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+		model.addAttribute("user", u);
+		model.addAttribute("userListRoles", listRoles);
+		model.addAttribute(new Boek());
+		
 		return "addBoekPage";
 	}
-	
+
 	@PostMapping(value = "/add")
-	public String onSubmit(@Valid Boek boek, BindingResult result, Model model, HttpSession session) {
+	public String onSubmit(@Valid Boek boek, BindingResult result, Model model, Authentication authentication) {
 		log.info("Post boek");
+
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		String username = userDetails.getUsername();
+		Optional<Users> user = ur.findByUsername(username);
+		Users u = null;
+		if (user.isPresent())
+			u = user.get();
+		List<String> listRoles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+		model.addAttribute("user", u);
+		model.addAttribute("userListRoles", listRoles);
+		
 		
 		// validate
+		bv.validate(boek, result);
 		System.out.println(result);
 		if (result.hasErrors())
-			return "redirect:/bibliotheek/list";
-		
-		System.out.println(boek.getLocaties());
+			return "addBoekPage";
+
 		br.save(boek);
 		return "redirect:/bibliotheek/list";
 	}
-	
+
 	@GetMapping(value = "/populair")
-	public String showBibPopulairPage(Model model, HttpSession session) {
+	public String showBibPopulairPage(Model model, Authentication authentication) {
 		log.info("Get bib populair");
-		Account account = (Account) session.getAttribute("account");
-		if (account == null)
-			return "redirect:/login";
-		model.addAttribute("account", account);
+		
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		String username = userDetails.getUsername();
+		Optional<Users> user = ur.findByUsername(username);
+		Users u = null;
+		if (user.isPresent())
+			u = user.get();
+		List<String> listRoles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+		model.addAttribute("user", u);
+		model.addAttribute("userListRoles", listRoles);
+		
 		model.addAttribute("boeken", br.findMeestPopulair());
 		return "bibPopulairPage";
 	}

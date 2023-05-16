@@ -10,6 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import service.BibliotheekService;
 import service.BibliotheekServiceImpl;
+import validator.BoekValidation;
 
 @SpringBootApplication
 @EnableJpaRepositories("repository")
@@ -27,5 +28,10 @@ public class BibliotheekExamenOpdrachtApplication implements WebMvcConfigurer {
 	@Bean
 	BibliotheekService bs() {
 		return new BibliotheekServiceImpl();
+	}
+	
+	@Bean
+	BoekValidation bv() {
+		return new BoekValidation();
 	}
 }

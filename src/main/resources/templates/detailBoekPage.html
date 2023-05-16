@@ -7,19 +7,8 @@
 </head>
 <body>
 	<!-- Navbar -->
-	<nav class="navbar">
-		<h1 class="navbar-title">
-			<a href="/bibliotheek/list">Bibliotheek LDK</a>
-		</h1>
-		<ul class="navbar-items">
-			<li class="navbar-item"><a href="/bibliotheek/list">Alle
-					boeken</a></li>
-			<li class="navbar-item"><a href="/bibliotheek/populair">Populairste boeken</a></li>
-			<li th:if="${account.role == 'Admin'}" class="navbar-item"><a
-				href="/bibliotheek/add">Boek toevoegen</a></li>
-			<li class="navbar-item"><a href="/login">Uitloggen</a></li>
-		</ul>
-	</nav>
+	<div th:insert="~{utils :: navbar}"></div>
+	
 	<div class="book-details">
 		<img alt="BoekImg" th:src="${boek.getImg}">
 		<div>
@@ -39,14 +28,15 @@
 			<p th:text="|Reviews: ${boek.getAantalSterren}/5|"></p>
 			<p th:text="|Prijs: ${boek.getAankoopprijs}|"></p>
 			<a
-				th:if="${!account.getFavorieten.contains(boek.getBoekID) && account.getFavorieten.size() < account.getMaxAantalFavs}"
+				th:if="${!user.getFavorieten.contains(boek.getBoekID) && user.getFavorieten.size() < user.getMaxAantalFavs}"
 				th:href="|/favorieten/add/${boek.getBoekID}|">
 				<button>Voeg toe aan favorieten</button>
-			</a> <a th:if="${account.getFavorieten.contains(boek.getBoekID)}"
+			</a> <a th:if="${user.getFavorieten.contains(boek.getBoekID)}"
 				th:href="|/favorieten/remove/${boek.getBoekID}|">
 				<button>Verwijder uit favorieten</button>
 			</a>
 		</div>
 	</div>
+	<div th:insert="~{utils :: footer}"></div>
 </body>
 </html>

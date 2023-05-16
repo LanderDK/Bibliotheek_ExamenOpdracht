@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -37,6 +38,7 @@ public class BoekLocatie implements Serializable {
 	private int plaatscode2;
 
 	@Pattern(regexp = "^[a-zA-Z]+$")
+	@NotNull
 	private String plaatsnaam;
 
 	public BoekLocatie(int plaatscode1, int plaatscode2, String plaatsnaam) {
