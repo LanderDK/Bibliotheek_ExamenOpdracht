@@ -19,12 +19,14 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @NamedQueries({ @NamedQuery(name = "Boek.findAll", query = "SELECT b FROM Boek b"),
 		@NamedQuery(name = "Boek.findMeestPopulair", query = "SELECT b FROM Boek b WHERE aantalSterren > 1 ORDER BY aantalSterren DESC LIMIT 2") })
 @NoArgsConstructor
 @EqualsAndHashCode(of = "boekNaam")
+@ToString
 @Getter
 @Setter
 public class Boek implements Serializable {

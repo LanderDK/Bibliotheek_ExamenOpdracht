@@ -14,41 +14,32 @@ import org.springframework.security.web.access.expression.WebExpressionAuthoriza
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig{
+public class SecurityConfig {
 
-    @Autowired
-    DataSource dataSource;
+	@Autowired
+	DataSource dataSource;
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        var encoder  = new BCryptPasswordEncoder();
-        auth.jdbcAuthentication()
-        .dataSource(dataSource)
-        .passwordEncoder(encoder);
-        
-    }
-    
-    @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().and()
-                .authorizeHttpRequests(requests -> 
-                        requests.requestMatchers("/login**").permitAll()
-                                .requestMatchers("/css/**").permitAll()
-                                .requestMatchers("/403**").permitAll()
-                                .requestMatchers("/bibliotheek/add").hasRole("ADMIN")
-                                .requestMatchers("/bibliotheek/**").hasAnyRole("USER","ADMIN")
-                                .requestMatchers("/favorieten/**").hasAnyRole("USER","ADMIN"))
+	@Autowired
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		var encoder = new BCryptPasswordEncoder();
+		auth.jdbcAuthentication().dataSource(dataSource).passwordEncoder(encoder);
+
+	}
+
+	@Bean
+	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http.csrf().and()
+				.authorizeHttpRequests(requests -> requests.requestMatchers("/login**").permitAll()
+						.requestMatchers("/css/**").permitAll().requestMatchers("/403**").permitAll()
+						.requestMatchers("/rest/**").permitAll().requestMatchers("/403**").permitAll()
+						.requestMatchers("/bibliotheek/add").hasRole("ADMIN").requestMatchers("/bibliotheek/**")
+						.hasAnyRole("USER", "ADMIN").requestMatchers("/favorieten/**").hasAnyRole("USER", "ADMIN"))
 //                                .access(new WebExpressionAuthorizationManager("hasRole('ROLE_USER')")))
-                .formLogin(form -> 
-                        form
-                        .defaultSuccessUrl("/bibliotheek/list", true)
-                             .loginPage("/login")
-                             .usernameParameter("username")    
-                            .passwordParameter("password"))
-//                .exceptionHandling().accessDeniedPage("/403")
-                ;
-        
-        return http.build();
-    }
-    
+				.formLogin(form -> form.defaultSuccessUrl("/bibliotheek/list", true).loginPage("/login")
+						.usernameParameter("username").passwordParameter("password"));
+//				.exceptionHandling().accessDeniedPage("/403");
+
+		return http.build();
+	}
+
 }

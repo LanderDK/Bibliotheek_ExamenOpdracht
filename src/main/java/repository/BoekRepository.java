@@ -12,4 +12,5 @@ public interface BoekRepository extends CrudRepository<Boek, Integer> {
 	List<Boek> findAll();
     Optional<Boek> findByBoekID(Integer boekID);
 	List<Boek> findMeestPopulair();
+    Optional<Boek> findByIsbn(String isbn);
 }

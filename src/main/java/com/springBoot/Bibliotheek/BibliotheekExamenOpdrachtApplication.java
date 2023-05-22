@@ -23,13 +23,14 @@ public class BibliotheekExamenOpdrachtApplication implements WebMvcConfigurer {
 
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addRedirectViewController("/", "/login");
+		//registry.addViewController("/403").setViewName("403");
 	}
-	
+
 	@Bean
 	BibliotheekService bs() {
 		return new BibliotheekServiceImpl();
 	}
-	
+
 	@Bean
 	BoekValidation bv() {
 		return new BoekValidation();
