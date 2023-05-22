@@ -50,17 +50,17 @@ public class BibRestController {
     	return br.findMeestPopulair();
     }
     
-    @PostMapping(value = "/boek/create")
-    public Boek createBoek(@RequestBody Boek boek) { 
-    	br.save(boek);
-		ArrayList<BoekLocatie> locaties = new ArrayList<>();
-		for (BoekLocatie bl : boek.getLocaties()) {
-			if (bl.getPlaatsnaam() != "" || !bl.getPlaatsnaam().isBlank() || !bl.getPlaatsnaam().isEmpty()) {
-				locaties.add(bl);
-			}
-		}
-		for (BoekLocatie locatie : locaties)
-			blr.save(locatie);
-		return boek;
-    }
+//    @PostMapping(value = "/boek/create")
+//    public Boek createBoek(@RequestBody Boek boek) { 
+//    	br.save(boek);
+//		ArrayList<BoekLocatie> locaties = new ArrayList<>();
+//		for (BoekLocatie bl : boek.getLocaties()) {
+//			if (bl.getPlaatsnaam() != "" || !bl.getPlaatsnaam().isBlank() || !bl.getPlaatsnaam().isEmpty()) {
+//				locaties.add(bl);
+//			}
+//		}
+//		for (BoekLocatie locatie : locaties)
+//			blr.save(locatie);
+//		return boek;
+//    }
 }
