@@ -8,7 +8,14 @@
 <body>
 	<!-- Navbar -->
 	<div th:insert="~{utils :: navbar}"></div>
-
+	<h1 th:text="|Welkom terug, ${user.username}!|"></h1>
+	<th:block th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+		<h1 th:text="|Rol: Admin|"></h1>
+	</th:block>
+	<th:block
+		th:unless="${#authorization.expression('hasRole(''ADMIN'')')}">
+		<h1 class="rol" th:text="|Role: User|"></h1>
+	</th:block>
 	<form th:action="@{/bibliotheek/add}" th:object="${boek}" method="post">
 		<p>
 			<label for="boekNaam">Boek Naam</label> <input type="text"
