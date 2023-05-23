@@ -2,11 +2,11 @@
 Examen opdracht EWDJ
 Lander De Kesel
 
-Login:
-- Admin:
--   Lander
--   TestPass1
+**Logingegevens**
 
-- User
--   Baba
--   TestPass2
+> Admin:
+- Gebruikersnaam: Lander
+- Wachtwoord: TestPass1
+> User:
+- Gebruikersnaam: Baba
+- Wachtwoord: TestPass2
