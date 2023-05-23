@@ -113,18 +113,21 @@ public class BibController {
 		model.addAttribute("user", u);
 		model.addAttribute("userListRoles", listRoles);
 
+		ArrayList<BoekLocatie> locaties = new ArrayList<>();
+		for (BoekLocatie bl : boek.getLocaties()) {
+			if (bl.getPlaatsnaam() != "" || !bl.getPlaatsnaam().isBlank() || !bl.getPlaatsnaam().isEmpty()) {
+				if (!blr.findByPlaatsnaam(bl.getPlaatsnaam()).isPresent())
+					locaties.add(bl);
+			}
+		}
+
 		// validate
 		bv.validate(boek, result);
 		if (result.hasErrors())
 			return "addBoekPage";
 
 		br.save(boek);
-		ArrayList<BoekLocatie> locaties = new ArrayList<>();
-		for (BoekLocatie bl : boek.getLocaties()) {
-			if (bl.getPlaatsnaam() != "" || !bl.getPlaatsnaam().isBlank() || !bl.getPlaatsnaam().isEmpty()) {
-				locaties.add(bl);
-			}
-		}
+
 		for (BoekLocatie locatie : locaties)
 			blr.save(locatie);
 

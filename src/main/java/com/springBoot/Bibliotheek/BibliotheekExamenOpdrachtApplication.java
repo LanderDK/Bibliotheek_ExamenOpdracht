@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import perform.PerformRest;
 import service.BibliotheekService;
 import service.BibliotheekServiceImpl;
 import validator.BoekValidation;
@@ -19,16 +20,16 @@ public class BibliotheekExamenOpdrachtApplication implements WebMvcConfigurer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BibliotheekExamenOpdrachtApplication.class, args);
+		try {
+			new PerformRest();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addRedirectViewController("/", "/login");
 		registry.addViewController("/403").setViewName("403");
-	}
-
-	@Bean
-	BibliotheekService bs() {
-		return new BibliotheekServiceImpl();
 	}
 
 	@Bean

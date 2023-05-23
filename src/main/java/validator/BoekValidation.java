@@ -3,6 +3,7 @@ package validator;
 import domain.Boek;
 import domain.BoekLocatie;
 import repository.BoekLocatieRespository;
+import repository.BoekRepository;
 
 import java.util.ArrayList;
 
@@ -12,6 +13,9 @@ import org.springframework.validation.Validator;
 
 public class BoekValidation implements Validator {
 
+	@Autowired
+	private BoekRepository br;
+	
 	@Override
 	public boolean supports(Class<?> klass) {
 		return Boek.class.isAssignableFrom(klass);
@@ -20,6 +24,12 @@ public class BoekValidation implements Validator {
 	@Override
 	public void validate(Object target, Errors errors) {
 		Boek boek = (Boek) target;
+		
+		if(boek.getIsbn() != null) {
+	    	if(br.findByIsbn(boek.getIsbn()).isPresent()) {
+		    	errors.rejectValue("isbn", "boek.isbn.bestaatal");
+		    }
+	    }
 
 		if (boek.getBoekNaam() == "" || boek.getBoekNaam().isBlank() || boek.getBoekNaam().isEmpty()) {
 			errors.rejectValue("boekNaam", "boekNaamNotFilledIn", null, "");

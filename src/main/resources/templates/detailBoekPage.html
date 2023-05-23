@@ -25,7 +25,7 @@
 				<p th:each="locatie: ${boek.getLocaties}"
 				th:text="${locatie.getPlaatsnaam}"></p>
 			</p>
-			<p th:text="|Reviews: ${boek.getAantalSterren}/5|"></p>
+			<p th:text="|Vind-Ik-Leuks: ${boek.getAantalSterren}|"></p>
 			<p th:text="|Prijs: ${boek.getAankoopprijs}|"></p>
 			<a
 				th:if="${!user.getFavorieten.contains(boek.getBoekID) && user.getFavorieten.size() < user.getMaxAantalFavs}"

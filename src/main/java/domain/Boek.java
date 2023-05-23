@@ -23,7 +23,8 @@ import lombok.ToString;
 
 @Entity
 @NamedQueries({ @NamedQuery(name = "Boek.findAll", query = "SELECT b FROM Boek b"),
-		@NamedQuery(name = "Boek.findMeestPopulair", query = "SELECT b FROM Boek b WHERE aantalSterren > 1 ORDER BY aantalSterren DESC LIMIT 2") })
+		@NamedQuery(name = "Boek.findMeestPopulair", query = "SELECT b FROM Boek b WHERE aantalSterren >= 4 ORDER BY aantalSterren DESC, boekNaam ASC"),
+		@NamedQuery(name = "Boek.findAllOfAuteur", query = "SELECT b FROM Boek b WHERE b.auteurs LIKE CONCAT('%', :auteur, '%')") })
 @NoArgsConstructor
 @EqualsAndHashCode(of = "boekNaam")
 @ToString
@@ -58,8 +59,8 @@ public class Boek implements Serializable {
 	@Min(value = 0)
 	private Integer aantalSterren;
 
-	@NotNull
-	@Pattern(regexp = "^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$", message = "Invalid IMG URL")
+	@NotEmpty
+	@NotBlank
 	private String img;
 
 	public Boek(String boekNaam, ArrayList<String> auteurs, String isbn, Double aankoopprijs,

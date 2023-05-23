@@ -34,7 +34,6 @@ public class SecurityConfig {
 						.requestMatchers("/rest/**").permitAll().requestMatchers("/403**").permitAll()
 						.requestMatchers("/bibliotheek/add").hasRole("ADMIN").requestMatchers("/bibliotheek/**")
 						.hasAnyRole("USER", "ADMIN").requestMatchers("/favorieten/**").hasAnyRole("USER", "ADMIN"))
-//                                .access(new WebExpressionAuthorizationManager("hasRole('ROLE_USER')")))
 				.formLogin(form -> form.defaultSuccessUrl("/bibliotheek/list", true).loginPage("/login")
 						.usernameParameter("username").passwordParameter("password"))
 				.exceptionHandling().accessDeniedPage("/403");

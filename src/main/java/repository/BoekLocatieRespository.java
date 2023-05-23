@@ -9,4 +9,5 @@ import domain.BoekLocatie;
 
 public interface BoekLocatieRespository extends CrudRepository<BoekLocatie, Integer> {
     Optional<BoekLocatie> findByLocatieID(Integer locatieID);
+    Optional<BoekLocatie> findByPlaatsnaam(String plaatsnaam);
 }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -22,7 +23,9 @@ class LoginControllerTest {
 
 	@Test
 	public void loginGet() throws Exception {
-		mockMvc.perform(get("/login")).andExpect(status().isOk()).andExpect(view().name("loginPage"));
+		mockMvc.perform(get("/login")).andExpect(status().isOk()).andExpect(view().name("loginPage"))
+				.andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("error"))
+				.andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("msg"));
 	}
 
 	@Test
@@ -36,4 +39,22 @@ class LoginControllerTest {
 		mockMvc.perform(formLogin("/login").user("username", "Lander").password("password", "TestPass1"))
 				.andExpect(status().isFound()).andExpect(redirectedUrl("/bibliotheek/list"));
 	}
+	
+	@Test
+    public void testLoginWithError() throws Exception {
+        mockMvc.perform(get("/login?error=true"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("loginPage"))
+                .andExpect(MockMvcResultMatchers.model().attribute("error", "Foute naam of paswoord!"))
+                .andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("msg"));
+    }
+
+    @Test
+    public void testLoginWithLogout() throws Exception {
+        mockMvc.perform(get("/login?logout=true"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("loginPage"))
+                .andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("error"))
+                .andExpect(MockMvcResultMatchers.model().attribute("msg", "Je bent succesvol uitgelogd."));
+    }
 }
